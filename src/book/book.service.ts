@@ -2,6 +2,7 @@ import {Injectable, NotFoundException} from '@nestjs/common';
 import { Book} from "./schema/book.schema";
 import * as mongoose from 'mongoose'
 import {InjectModel} from '@nestjs/mongoose'
+import {Query} from 'express-serve-static-core';
 
 //we need to inject our module and get data from db for that we use the constructor
 
@@ -13,8 +14,19 @@ export class BookService {
 
   ) {}
 
-  async findAll(): Promise<Book[]> {
-    const books = await this.bookModel.find()
+  async findAll(query: Query): Promise<Book[]> {
+
+    const resPerPage = 2
+    const currentPage = Number(query.page) || 1
+    const skip = resPerPage * (currentPage - 1)
+
+    const keyword = query.keyword ? {
+      title: {
+        $regex: query.keyword,
+        $options: 'i'
+      }
+    } : {}
+    const books = await this.bookModel.find({...keyword}).limit(resPerPage).skip(skip)
     return books
   }
 
