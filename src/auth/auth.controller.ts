@@ -14,6 +14,7 @@ export class AuthController {
 
   @Get('/login')
   login(@Body() loginDto: LogInDto): Promise<{ token: string}> {
+    console.log(loginDto)
     return this.authService.login(loginDto)
   }
 }
