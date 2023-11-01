@@ -5,7 +5,10 @@ import { BookModule } from './book/book.module';
 import {ConfigModule} from "@nestjs/config";
 import * as mongoose from "mongoose";
 import {MongooseModule} from "@nestjs/mongoose";
+import { AuthController } from './auth/auth.controller';
+import { AuthService } from './auth/auth.service';
 import * as process from "process";
+import { AuthModule } from "./auth/auth.module";
 
 @Module({
   imports: [
@@ -18,7 +21,8 @@ import * as process from "process";
         user: process.env.MONGODB_USER!,
         pass: process.env.MONGODB_PASSWORD!,}
       ),
-    BookModule],
+    BookModule,
+  AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })
